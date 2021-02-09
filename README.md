@@ -12,5 +12,5 @@ encoded image in string. You can use this string to
 show the blurry version of the actual image while it's
 being downloaded.
 
-Hope this project helps you, happy coding!
+*Hope this project helps you, happy coding!*
 
