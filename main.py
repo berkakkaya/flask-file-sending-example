@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024 # 16 megabytes
 
 @app.route("/file", methods=["GET"])
-def get_file():
+def send_the_file():
     if not isdir("files"):
         return "File is not submitted yet.", 404
     elif len(listdir(path="files/")) == 0:
@@ -21,7 +21,7 @@ def get_file():
     return send_file(f"files/{filename}")
 
 @app.route("/file", methods=["POST"])
-def send_the_file():
+def get_file():
     file: FileStorage = request.files["file"]
     filename = secure_filename(file.filename)
     
