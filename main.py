@@ -13,6 +13,26 @@ FILENAME = "image"
 BLURHASH_PATH = join("files", "blurhash.txt")
 
 
+def read_blurhash_file():
+    """Reads the blurhash file and returns filename and blurhash string from it.
+
+    Returns
+    -------
+    list[str]
+        List that consist of two parts: filename and blurhash string.
+        Data is stored in the same order.
+    """
+
+    # Read data from the blurhash file 
+    with open(BLURHASH_PATH, "r") as f:
+        content = f.read()
+    
+    # Our file consists of two parts: [filename] [blurhash string]
+    # Parts are splitted by space, so we have to use the split function
+    # to access those parts separately.
+    return content.split(" ")
+
+
 @app.route("/file", methods=["GET"])
 def send_the_file():
     if not isdir("files"):
