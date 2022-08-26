@@ -97,11 +97,12 @@ def get_the_file():
 
 @app.route("/blurhash", methods=["GET"])
 def send_blurhash():
-    if not isfile("blurhash_str.txt"):
-        return "Blurhash string not exists", 404
+    # Check if the blurhash file exists
+    if not isfile(BLURHASH_PATH):
+        return "File is not submitted yet", 404
     
-    with open("blurhash_str.txt", "r") as f:
-        content = f.read()
-    
-    return content
+    # Read the blurhash string from the file
+    content = read_blurhash_file()
+    blurhash_str = content[1]
 
+    return blurhash_str
