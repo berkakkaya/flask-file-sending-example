@@ -35,14 +35,25 @@ def read_blurhash_file():
 
 @app.route("/file", methods=["GET"])
 def send_the_file():
-    if not isdir("files"):
-        return "File is not submitted yet.", 404
-    elif len(listdir(path="files/")) == 0:
+    # We store filename in the blurhash string file, so we read
+    # that file first.
+
+    # Check if the blurhash string file exists. If not, return 404
+    if not isfile(BLURHASH_PATH):
         return "File is not submitted yet", 404
     
-    filename = listdir(path="files/")[0]
+    # Read the blurhash file and obtain the filename from it
+    content = read_blurhash_file()
+    filename = content[0]
+
+    # Check if the image still exists
+    filepath = join("files", filename)
+    if not isfile(filepath):
+        return "File is not submitted yet", 404
     
-    return send_file(f"files/{filename}")
+    # Send the image
+    return send_file(filepath)
+
 
 @app.route("/file", methods=["POST"])
 def get_file():
