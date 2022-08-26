@@ -322,6 +322,4 @@ fabric.properties
 
 # Project specific
 files/
-blurhash_str.txt
 .rest
-
