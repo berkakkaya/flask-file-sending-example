@@ -2,12 +2,16 @@ import blurhash
 from flask import Flask, request, send_file
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import FileStorage
-from blurhash import encode
-from os.path import isdir, isfile
-from os import listdir, mkdir, remove
+from os.path import isdir, isfile, join
+from os import mkdir
 
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 2 * 1024 * 1024  # 2 megabytes
+
+# Constants
+FILENAME = "image"
+BLURHASH_PATH = join("files", "blurhash.txt")
+
 
 @app.route("/file", methods=["GET"])
 def send_the_file():
