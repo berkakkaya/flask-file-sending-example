@@ -7,7 +7,7 @@ from os.path import isdir, isfile
 from os import listdir, mkdir, remove
 
 app = Flask(__name__)
-app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024 # 16 megabytes
+app.config["MAX_CONTENT_LENGTH"] = 2 * 1024 * 1024  # 2 megabytes
 
 @app.route("/file", methods=["GET"])
 def send_the_file():
