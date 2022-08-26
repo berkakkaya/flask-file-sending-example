@@ -56,37 +56,44 @@ def send_the_file():
 
 
 @app.route("/file", methods=["POST"])
-def get_file():
+def get_the_file():
+    # Get the file from request
     file: FileStorage = request.files["file"]
     filename = secure_filename(file.filename)
     
-    if len(filename) < 4:
+    # Split the filename as base and extension
+    filename_splitted = filename.split(".")
+
+    # Return 400 for invalid filenames
+    if len(filename_splitted) != 2 or filename_splitted[0] == "":
         return "Invalid filename", 400
-    
-    if filename.split(".")[-1] not in ["jpg", "png", "jpeg"]:
+
+    # Also block every file other than "jpg", "png" and "jpeg"
+    if filename_splitted[-1] not in ["jpg", "png", "jpeg"]:
         return "Filetype not allowed", 400
     
+    # NOTE: For demonstration, files will be stored inside local storage.
+    # Create the data directory, if not exists
     if not isdir("files"):
         mkdir("files")
-        
-    files = listdir("files/")
     
-    if len(files) != 0:
-        remove(f"files/{files[0]}")
+    # Change the filename to proper one and save the image
+    filename = f"{FILENAME}.{filename_splitted[-1]}"
+    image_path = join("files", filename)
+    file.save(image_path)
     
-    if isfile("blurhash_str.txt"):
-        remove("blurhash_str.txt")
-    
-    file.save(f"files/{filename}")
-    
-    del file
-    
-    blurhash_str = blurhash.encode(f"files/{filename}", x_components=4, y_components=3)
-    
-    with open("blurhash_str.txt", "w") as f:
-        f.write(blurhash_str)
-    
+    # Create a blurhash string for the image
+    blurhash_str = blurhash.encode(image_path, x_components=4, y_components=3)
+
+    # Save the string to a file
+    with open(BLURHASH_PATH, "w") as f:
+        # File will consist of two parts: [filename] [blurhash string]
+        data = f"{filename} {blurhash_str}"
+
+        f.write(data)
+
     return "File was successfully submitted."
+
 
 @app.route("/blurhash", methods=["GET"])
 def send_blurhash():
